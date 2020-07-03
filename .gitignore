@@ -2,8 +2,8 @@
 /.idea
 /.gradle
 /bin
-/out
 /build
 /.settings
 /*.db
 /.project
+/.vscode
