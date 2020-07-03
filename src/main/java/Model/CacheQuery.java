@@ -13,7 +13,7 @@ public class CacheQuery extends SqLiteDb implements IInfoQuery{
 
     public CacheQuery(){}
 
-    public CacheQuery getInstance(){
+    public static CacheQuery getInstance(){
         if (instance==null){
             instance = new CacheQuery();
         }

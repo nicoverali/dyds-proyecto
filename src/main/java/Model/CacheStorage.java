@@ -11,7 +11,7 @@ public class CacheStorage extends SqLiteDb implements IInfoStorage {
         createNewDatabase();
     }
 
-    public CacheStorage getInstance(){
+    public static CacheStorage getInstance(){
         if(instance==null){
             instance = new CacheStorage();
         }
