@@ -1,4 +1,7 @@
-package Model;
+package model.storage;
+
+import model.SqLiteDb;
+import model.Word;
 
 import java.sql.*;
 import java.text.SimpleDateFormat;

@@ -1,9 +1,11 @@
-package Model;
+package model.query;
+
+import model.SqLiteDb;
+import model.Word;
 
 import java.sql.*;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.time.format.DateTimeParseException;
 import java.util.Date;
 
 public class CacheQuery extends SqLiteDb implements IInfoQuery{

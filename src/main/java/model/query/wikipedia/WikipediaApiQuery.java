@@ -1,5 +1,7 @@
-package Model;
+package model.query.wikipedia;
 
+import model.Word;
+import model.query.IInfoQuery;
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -11,20 +13,20 @@ import java.io.IOException;
 import java.util.Map;
 import java.util.Set;
 
-public class WikiApiQuery implements IInfoQuery {
+public class WikipediaApiQuery implements IInfoQuery {
 
-    private static WikiApiQuery instance;
-    private WikiApi wikiApi;
+    private static WikipediaApiQuery instance;
+    private WikipediaApi wikipediaApi;
     private Word wordResponse;
 
-    private WikiApiQuery(WikiApi wikiApi){
-        this.wikiApi = wikiApi;
+    private WikipediaApiQuery(WikipediaApi wikipediaApi){
+        this.wikipediaApi = wikipediaApi;
         //createWikiApiObject();
     }
 
-    public static WikiApiQuery getInstance(WikiApi wikiApi){
+    public static WikipediaApiQuery getInstance(WikipediaApi wikipediaApi){
         if(instance==null){
-            instance = new WikiApiQuery(wikiApi);
+            instance = new WikipediaApiQuery(wikipediaApi);
         }
 
         return instance;
@@ -36,7 +38,7 @@ public class WikiApiQuery implements IInfoQuery {
                 .addConverterFactory(ScalarsConverterFactory.create())
                 .build();
 
-        wikiApi = retrofit.create(WikiApi.class);
+        wikipediaApi = retrofit.create(WikipediaApi.class);
     }
 
     @Override
@@ -50,7 +52,7 @@ public class WikiApiQuery implements IInfoQuery {
                     Response<String> callResponse;
                     Word word = null;
                     try {
-                        callResponse = wikiApi.getTerm(term).execute();
+                        callResponse = wikipediaApi.getTerm(term).execute();
 
                         word = analizeResponseAndCreateWord(callResponse);
 

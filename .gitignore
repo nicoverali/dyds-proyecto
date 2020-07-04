@@ -1,4 +1,7 @@
 /out
+/bin
+/build
 /.idea
 /.gradle
 /*.db
+/.vscode
