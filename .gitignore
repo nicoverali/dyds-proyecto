@@ -1,8 +1,8 @@
 /out
-/.idea
-/.gradle
 /bin
 /build
+/.idea
+/.gradle
 /.settings
 /*.db
 /.project
