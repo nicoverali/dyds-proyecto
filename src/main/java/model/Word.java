@@ -4,18 +4,17 @@ package model;
 import java.util.Date;
 
 public class Word {
-    private String term;
-    private String meaning;
+    private final String term;
+    private final String meaning;
     private int source;
     private Date date; // Ver el date que uso porque es cuestionable
 
-    public void setTerm(String term){
+    public Word(String term, String meaning){
         this.term = term;
-    }
-    public void setMeaning(String meaning){
         this.meaning = meaning;
     }
-    public void  setSource(int source){
+
+    public void setSource(int source){
         this.source = source;
     }
     public void setDate(Date date){

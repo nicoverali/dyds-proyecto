@@ -24,44 +24,16 @@ public class WikipediaApiQueryAsync implements IInfoQueryAsync {
 
     @Override
     public void getMeaning(String term, IInfoQueryListener listener) {
-        wikipediaApi.getTerm(term).enqueue(new Callback<String>() {
+        wikipediaApi.getTerm(term).enqueue(new Callback<Word>() {
 
-            public void onResponse(Call<String> call, Response<String> response) {
-                Word word = analizeResponseAndCreateWord(response, term);
-                notifyListener(word, listener);
+            public void onResponse(Call<Word> call, Response<Word> wordResponse) {
+                notifyListener(wordResponse.body(), listener);
             }
 
-            public void onFailure(Call<String> call, Throwable t) {
+            public void onFailure(Call<Word> call, Throwable t) {
                 // TODO What should we do on failure ?
             }
         });
-    }
-
-    private Word analizeResponseAndCreateWord(Response<String> callResponse, String term){
-        Word word = null;
-
-        Gson gson = new Gson();
-        JsonObject jobj = gson.fromJson(callResponse.body(), JsonObject.class);
-        JsonObject query = jobj.get("query").getAsJsonObject();
-        JsonObject pages = query.get("pages").getAsJsonObject();
-        Set<Map.Entry<String, JsonElement>> pagesSet = pages.entrySet();
-        Map.Entry<String, JsonElement> first = pagesSet.iterator().next();
-        JsonObject page = first.getValue().getAsJsonObject();
-        JsonElement meaning = page.get("extract");
-
-        if (meaning != null) {
-            word = createWordObject(term, meaning.getAsString().replace("\\n", "\n"));
-        }
-
-        return word;
-
-    }
-
-    private Word createWordObject(String term, String extract){
-        Word toRet = new Word();
-        toRet.setTerm(term);
-        toRet.setMeaning(extract);
-        return toRet;
     }
 
     private void notifyListener(Word word, IInfoQueryListener listener){
