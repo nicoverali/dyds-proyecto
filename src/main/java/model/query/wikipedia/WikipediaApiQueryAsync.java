@@ -23,7 +23,7 @@ public class WikipediaApiQueryAsync implements IInfoQueryAsync {
     }
 
     @Override
-    public void getMeaning(String term, IInfoQueryListener listener) {
+    public void getMeaningWord(String term, IInfoQueryListener listener) {
         wikipediaApi.getTerm(term).enqueue(new Callback<Word>() {
 
             public void onResponse(Call<Word> call, Response<Word> wordResponse) {

@@ -1,5 +1,5 @@
 package model.query;
 
 public interface IInfoQueryAsync {
-    void getMeaning(String term, IInfoQueryListener listener);
+    void getMeaningWord(String term, IInfoQueryListener listener);
 }

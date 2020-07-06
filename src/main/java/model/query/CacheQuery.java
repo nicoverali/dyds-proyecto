@@ -29,7 +29,7 @@ public class CacheQuery extends SqLiteDb implements IInfoQuery{
      * retorna NULL.
      */
     @Override
-    public Word getMeaning(String term) {
+    public Word getMeaningWord(String term) {
         Connection connection = null;
         try
         {
@@ -78,8 +78,7 @@ public class CacheQuery extends SqLiteDb implements IInfoQuery{
         String meaning = rs.getString("meaning");
 
         if(existCacheEntry(meaning)){
-            toRet.setTerm(term);
-            toRet.setMeaning(meaning);
+            toRet = new Word(term,meaning);
             toRet.setSource(rs.getInt("source"));
             toRet.setDate(getFormatDate(rs.getString("date")));
         }
