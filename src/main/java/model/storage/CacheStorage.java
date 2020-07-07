@@ -11,7 +11,7 @@ public class CacheStorage extends SqLiteDb implements IInfoStorage {
     private static CacheStorage instance;
 
     private CacheStorage(){
-        createNewDatabase();
+        createNewDatabaseIfNoExist();
     }
 
     public static CacheStorage getInstance(){
@@ -21,29 +21,6 @@ public class CacheStorage extends SqLiteDb implements IInfoStorage {
         return instance;
     }
 
-    private void createNewDatabase() {
-
-        try (Connection connection = DriverManager.getConnection(url)) {
-
-            if (isConnectionOpen(connection)) {
-
-                DatabaseMetaData meta = connection.getMetaData();
-
-                Statement statement = createAndGetStatement(connection);
-
-                createDbTable(statement);
-            }
-
-        } catch (SQLException e) {
-            System.out.println(e.getMessage());
-        }
-    }
-
-
-    private void createDbTable(Statement statement) throws SQLException {
-        statement.executeUpdate("create table terms (id INTEGER PRIMARY KEY AUTOINCREMENT, term string, meaning string, " +
-                "source integer, date TEXT)");
-    }
 
     @Override
     public void saveWord(Word word) {
