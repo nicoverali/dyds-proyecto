@@ -1,8 +1,8 @@
 package view;
 
-import Model.IDictionaryModel;
-import Model.IDictionaryModelListener;
 import controller.IDictionaryController;
+import model.IWordModel;
+import model.IWordModelListener;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
@@ -15,9 +15,9 @@ public class DictionaryView implements IDictionaryView {
   private JTextPane wordMeaningPanel;
 
   private final IDictionaryController dictController;
-  private final IDictionaryModel dictModel;
+  private final IWordModel dictModel;
 
-  public DictionaryView(IDictionaryController controller, IDictionaryModel model){
+  public DictionaryView(IDictionaryController controller, IWordModel model){
     dictController = controller;
     dictModel = model;
     initJElements();
@@ -35,10 +35,10 @@ public class DictionaryView implements IDictionaryView {
       }
     });
 
-    dictModel.setModelListener(new IDictionaryModelListener(){
+    dictModel.setListener(new IWordModelListener(){
       @Override
-      public void onLastMeaningUpdate() {
-        wordMeaningPanel.setText(dictModel.getLastWordMeaning());    
+      public void didUpdateWord() {
+        wordMeaningPanel.setText(dictModel.getWord().getMeaning());
       }
     });
   }

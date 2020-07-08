@@ -1,17 +1,18 @@
 package controller;
 
-import Model.IDictionaryModel;
+
+import model.IWordModel;
 
 public class DictionaryController implements IDictionaryController {
 
-    private final IDictionaryModel dictModel;
+    private final IWordModel dictModel;
 
-    public DictionaryController(IDictionaryModel model){
+    public DictionaryController(IWordModel model){
         dictModel = model;
     }
 
     @Override
     public void onUserWordSearch(String word) {
-        dictModel.updateLastWordMeaning(word);
+        dictModel.searchWord(word);
     }
 }
