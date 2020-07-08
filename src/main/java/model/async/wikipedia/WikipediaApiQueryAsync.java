@@ -1,20 +1,14 @@
-package model.query.wikipedia;
+package model.async.wikipedia;
 
 import model.Word;
-import model.query.IInfoQueryAsync;
-import model.query.IInfoQueryListener;
-import com.google.gson.Gson;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
+import model.async.IWordQueryAsync;
+import model.async.IWordAsyncQueryListener;
 
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-import java.util.Map;
-import java.util.Set;
-
-public class WikipediaApiQueryAsync implements IInfoQueryAsync {
+public class WikipediaApiQueryAsync implements IWordQueryAsync {
 
     private final WikipediaApi wikipediaApi;
 
@@ -23,7 +17,7 @@ public class WikipediaApiQueryAsync implements IInfoQueryAsync {
     }
 
     @Override
-    public void getMeaningWord(String term, IInfoQueryListener listener) {
+    public void getMeaningWord(String term, IWordAsyncQueryListener listener) {
         wikipediaApi.getTerm(term).enqueue(new Callback<Word>() {
 
             public void onResponse(Call<Word> call, Response<Word> wordResponse) {
@@ -36,7 +30,7 @@ public class WikipediaApiQueryAsync implements IInfoQueryAsync {
         });
     }
 
-    private void notifyListener(Word word, IInfoQueryListener listener){
+    private void notifyListener(Word word, IWordAsyncQueryListener listener){
         if(listener!=null){
             listener.onWordResult(word);
         }

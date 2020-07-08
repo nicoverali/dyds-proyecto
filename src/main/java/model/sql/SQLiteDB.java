@@ -1,7 +1,5 @@
 package model.sql;
 
-import org.intellij.lang.annotations.Language;
-
 import javax.sql.rowset.CachedRowSet;
 import javax.sql.rowset.RowSetProvider;
 import java.sql.*;

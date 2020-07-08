@@ -1,4 +1,4 @@
-package model.query.wikipedia;
+package model.async.wikipedia;
 
 import com.google.gson.*;
 import model.Word;

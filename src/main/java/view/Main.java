@@ -7,11 +7,11 @@ import controller.IDictionaryController;
 import model.IWordModel;
 import model.Word;
 import model.WordModel;
-import model.query.CacheQuery;
-import model.query.wikipedia.WikipediaApi;
-import model.query.wikipedia.WikipediaApiQueryAsync;
-import model.query.wikipedia.WikipediaWordDeserializer;
-import model.storage.CacheStorage;
+import model.async.wikipedia.WikipediaApi;
+import model.async.wikipedia.WikipediaApiQueryAsync;
+import model.async.wikipedia.WikipediaWordDeserializer;
+import model.cache.WordCacheSQLite;
+import model.sql.SQLiteDB;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 import retrofit2.converter.scalars.ScalarsConverterFactory;
@@ -21,6 +21,8 @@ import javax.swing.*;
 public class Main {
 
     public static void main(String[] args){
+        SQLiteDB db = new SQLiteDB("dictionary");
+
         Gson gson = new GsonBuilder()
                         .registerTypeAdapter(Word.class, new WikipediaWordDeserializer())
                         .create();
@@ -33,7 +35,7 @@ public class Main {
 
         WikipediaApi wikiAPI = retrofit.create(WikipediaApi.class);
 
-       IWordModel dictModel = new WordModel(CacheStorage.getInstance(), CacheQuery.getInstance(), new WikipediaApiQueryAsync(wikiAPI));
+       IWordModel dictModel = new WordModel(new WordCacheSQLite(db), new WikipediaApiQueryAsync(wikiAPI));
        IDictionaryController dictController = new DictionaryController(dictModel);
        IDictionaryView dictView = new DictionaryView(dictController, dictModel);
 

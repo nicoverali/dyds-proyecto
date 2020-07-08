@@ -1,4 +1,4 @@
-package model.query.wikipedia;
+package model.async.wikipedia;
 
 import model.Word;
 import retrofit2.Call;

@@ -1,17 +1,7 @@
 package model.storage;
 
 import model.Word;
-import model.query.CacheQuery;
-import model.query.IInfoQuery;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
-
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
-import java.sql.Statement;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 class CacheStorageTest {
 
@@ -38,7 +28,7 @@ class CacheStorageTest {
     public void shouldSaveWordIntoDb(){
         Word word = new Word("prueba","Meaning de prueba");
 
-        IInfoStorage cacheSt = CacheStorage.getInstance();
+        IWordCache cacheSt = CacheStorage.getInstance();
 
         cacheSt.saveWord(word);
 

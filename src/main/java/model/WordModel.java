@@ -1,26 +1,18 @@
 package model;
 
-import model.query.IInfoQuery;
-import model.query.IInfoQueryAsync;
-import model.query.IInfoQueryListener;
-import model.storage.IInfoStorage;
-
-import java.sql.Timestamp;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import model.async.IWordAsyncQueryListener;
+import model.async.IWordQueryAsync;
+import model.cache.IWordCache;
 
 public class WordModel implements IWordModel {
-    private IInfoStorage cacheStorage;
-    private IInfoQuery cacheQuery;
-    private IInfoQueryAsync wikiQuery;
+    private IWordCache wordCache;
+    private IWordQueryAsync wordAsyncQuery;
     private Word lastUpdateWord;
     private IWordModelListener listener;
 
-    public WordModel(IInfoStorage cacheSt,IInfoQuery cacheQ, IInfoQueryAsync wikiQ){
-        this.cacheStorage = cacheSt;
-        this.cacheQuery = cacheQ;
-        this.wikiQuery = wikiQ;
+    public WordModel(IWordCache wordCache, IWordQueryAsync wordQueryAsync){
+        this.wordCache = wordCache;
+        this.wordAsyncQuery = wordQueryAsync;
     }
 
     @Override
@@ -36,21 +28,21 @@ public class WordModel implements IWordModel {
     @Override
     public void searchWord(String term) {
 
-        Word word = cacheQuery.getMeaningWord(term);
+        Word word = wordCache.get(term);
 
-        if(existWord(word) && checkWordDateOk(word.getDate())){
+        if(existWord(word)){
             lastUpdateWord = word;
             notifyListener();
         }
         else{
 
-            wikiQuery.getMeaningWord(term, new IInfoQueryListener() {
+            wordAsyncQuery.getMeaningWord(term, new IWordAsyncQueryListener() {
                 @Override
                 public void onWordResult(Word word) {
                     lastUpdateWord = word;
 
                     if(hasMeaning(word)) {
-                        updateCacheStorage(word);
+                        wordCache.save(word);
                     }
 
                     notifyListener();
@@ -70,39 +62,9 @@ public class WordModel implements IWordModel {
         return !word.getMeaning().equals("");
     }
 
-    private boolean checkWordDateOk(Date date){
-        Date yesterday = getYesterdayDate();
-
-        return date.after(yesterday);
-    }
-
-    private void updateCacheStorage(Word word){
-        cacheStorage.saveWord(word);
-    }
-
     private void notifyListener(){
         if(listener!=null){
             listener.didUpdateWord();
         }
-    }
-
-    private Date getActualDate(){
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        Timestamp timestamp = new Timestamp(System.currentTimeMillis());
-        String date = sdf.format(timestamp);
-        return new Date(date);
-    }
-
-    private Date getYesterdayDate(){
-        Date yesterday = null;
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        String formatDate = sdf.format(System.currentTimeMillis() - 1000L * 60L * 60L * 24L);
-        try {
-            yesterday = sdf.parse(formatDate);
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-
-        return yesterday;
     }
 }

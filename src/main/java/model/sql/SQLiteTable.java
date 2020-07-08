@@ -1,9 +1,9 @@
 package model.sql;
 
-import org.intellij.lang.annotations.Language;
-
 import javax.sql.rowset.CachedRowSet;
-import java.sql.*;
+import java.sql.SQLException;
+import java.util.Arrays;
+import java.util.stream.Collectors;
 
 class SQLiteTable implements ISQLiteTable {
 
@@ -28,8 +28,14 @@ class SQLiteTable implements ISQLiteTable {
 
     @Override
     public int insert(String[] values) throws SQLException{
-        String parsedValues = String.join(",", values);
+        String parsedValues = parseValues(values);
         return database.executeUpdate("INSERT INTO "+tableName+" VALUES ("+parsedValues+")");
+    }
+
+    private String parseValues(String[] values){
+        return Arrays.stream(values)
+                .map(s -> "\"" + s + "\"")
+                .collect(Collectors.joining(", "));
     }
 
 }
