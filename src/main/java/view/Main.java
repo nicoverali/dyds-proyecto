@@ -11,6 +11,7 @@ import model.async.wikipedia.WikipediaApi;
 import model.async.wikipedia.WikipediaApiQueryAsync;
 import model.async.wikipedia.WikipediaWordDeserializer;
 import model.cache.WordCacheSQLite;
+import model.sql.ISQLiteDB;
 import model.sql.SQLiteDB;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
@@ -21,7 +22,7 @@ import javax.swing.*;
 public class Main {
 
     public static void main(String[] args){
-        SQLiteDB db = new SQLiteDB("dictionary");
+        ISQLiteDB db = new SQLiteDB("dictionary");
 
         Gson gson = new GsonBuilder()
                         .registerTypeAdapter(Word.class, new WikipediaWordDeserializer())

@@ -4,25 +4,23 @@ import javax.sql.rowset.CachedRowSet;
 import javax.sql.rowset.RowSetProvider;
 import java.sql.*;
 
-public class SQLiteDB {
+public class SQLiteDB implements ISQLiteDB {
 
     private static final String BASE_URL = "jdbc:sqlite:./%s.db";
     private final String dbUrl;
 
     public SQLiteDB(String databaseName){
-        dbUrl = String.format(BASE_URL, databaseName);
+        this.dbUrl = String.format(BASE_URL, databaseName);
     }
 
-    public SQLiteTable createTable(String tableName, String[] attributes) throws SQLException{
-        createTableIfNotExists(tableName, attributes);
-        return new SQLiteTable(this, tableName);
+    @Override
+    public void createTable(String tableName, String[] attributes) throws SQLException {
+        String parsedAttributes = String.join(",", attributes);
+        String createStatement = "CREATE TABLE IF NOT EXISTS "+tableName+" ("+parsedAttributes+")";
+        executeUpdate(createStatement);
     }
 
-    private void createTableIfNotExists(String tableName, String[] tableAttributes) throws SQLException {
-        String attributes = String.join(",",tableAttributes);
-        executeUpdate("CREATE TABLE IF NOT EXISTS "+tableName+" ("+attributes+")");
-    }
-
+    @Override
     public CachedRowSet executeQuery(String query) throws SQLException {
         try (Connection conn = DriverManager.getConnection(dbUrl)){
             try (Statement statement = conn.createStatement()){
@@ -32,6 +30,7 @@ public class SQLiteDB {
         }
     }
 
+    @Override
     public int executeUpdate(String update) throws SQLException{
         try (Connection conn = DriverManager.getConnection(dbUrl)){
             try (Statement statement = conn.createStatement()){

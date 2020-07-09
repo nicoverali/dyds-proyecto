@@ -1,8 +1,7 @@
 package model.cache;
 
 import model.Word;
-import model.sql.ISQLiteTable;
-import model.sql.SQLiteDB;
+import model.sql.ISQLiteDB;
 
 import javax.sql.rowset.CachedRowSet;
 import java.sql.ResultSet;
@@ -19,31 +18,31 @@ public class WordCacheSQLite implements IWordCache {
             "date TEXT"
     };
 
-    private ISQLiteTable wordTable;
+    private ISQLiteDB database;
 
-    public WordCacheSQLite(SQLiteDB database){
+    public WordCacheSQLite(ISQLiteDB database){
+        this.database = database;
         try{
-            wordTable = database.createTable(TABLE_NAME, TABLE_ATTRIBUTES);
+            database.createTable(TABLE_NAME, TABLE_ATTRIBUTES);
         } catch (SQLException e){
-            System.out.println(e);
+            e.printStackTrace();
         }
     }
 
     @Override
     public void save(Word word) {
         try {
-            String[] insertValues = new String[]{"NULL", word.getTerm(), word.getMeaning(), "1", "CURRENT_TIMESTAMP"};
-            wordTable.insert(insertValues);
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
+            database.executeUpdate("INSERT INTO "+TABLE_NAME+" VALUES( NULL, \""+word.getTerm()+"\", \""+word.getMeaning()+"\", 1, CURRENT_TIMESTAMP )");
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
     }
 
     @Override
     public Word get(String term) {
         try {
-            String condition = String.format("term == %s AND date >= DATE('now', '-1 day')", term);
-            CachedRowSet resultSet = wordTable.getAllWhere(condition);
+            String query = "SELECT * FROM "+TABLE_NAME+" WHERE term == "+term+" AND date >= DATE('now', '-1 day')";
+            CachedRowSet resultSet = database.executeQuery(query);
             return getWordFrom(resultSet);
         } catch (SQLException e){
             return null;
@@ -52,7 +51,7 @@ public class WordCacheSQLite implements IWordCache {
 
     private Word getWordFrom(ResultSet rs) throws SQLException {
         Word word = null;
-        if(rs.next()){
+        if(hasResult(rs)){
             String term = rs.getString("term");
             String meaning = rs.getString("meaning");
 
@@ -61,5 +60,9 @@ public class WordCacheSQLite implements IWordCache {
             word.setDate(rs.getDate("date"));
         }
         return word;
+    }
+
+    private boolean hasResult(ResultSet rs) throws SQLException{
+        return rs.next();
     }
 }
