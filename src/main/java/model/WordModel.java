@@ -32,7 +32,7 @@ public class WordModel implements IWordModel {
 
         if(existWord(word)){
             lastUpdateWord = word;
-            notifyListener();
+            notifySuccessToListener();
         }
         else{
 
@@ -40,17 +40,14 @@ public class WordModel implements IWordModel {
                 @Override
                 public void onSuccess(Word word) {
                     lastUpdateWord = word;
-
-                    if(hasMeaning(word)) {
-                        wordCache.save(word);
-                    }
-
-                    notifyListener();
+                    wordCache.save(word);
+                    notifySuccessToListener();
                 }
 
                 @Override
                 public void onFailure() {
-
+                    lastUpdateWord = null;
+                    notifyFailureToListener();
                 }
             });
 
@@ -61,15 +58,15 @@ public class WordModel implements IWordModel {
         return word!=null;
     }
 
-    // Habria que saber que sucede cuando recibo de la api una busqueda sin resultado.
-    // meaning es igual a "" ?
-    private boolean hasMeaning(Word word){
-        return !word.getMeaning().equals("");
+    private void notifySuccessToListener(){
+        if(listener!=null){
+            listener.onWordUpdate();
+        }
     }
 
-    private void notifyListener(){
+    private void notifyFailureToListener(){
         if(listener!=null){
-            listener.didUpdateWord();
+            listener.onWordNotFound();
         }
     }
 }

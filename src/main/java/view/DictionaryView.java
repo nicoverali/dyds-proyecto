@@ -37,8 +37,13 @@ public class DictionaryView implements IDictionaryView {
 
     dictModel.setListener(new IWordModelListener(){
       @Override
-      public void didUpdateWord() {
+      public void onWordUpdate() {
         wordMeaningPanel.setText(dictModel.getWord().getMeaning());
+      }
+
+      @Override
+      public void onWordNotFound() {
+
       }
     });
   }

@@ -1,5 +1,7 @@
 package model;
 
 public interface IWordModelListener {
-    void didUpdateWord();
+    void onWordUpdate();
+
+    void onWordNotFound();
 }
