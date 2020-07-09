@@ -1,6 +1,6 @@
 package model;
 
-import model.async.IWordAsyncQueryListener;
+import model.async.IWordQueryAsyncListener;
 import model.async.IWordQueryAsync;
 import model.cache.IWordCache;
 
@@ -36,9 +36,9 @@ public class WordModel implements IWordModel {
         }
         else{
 
-            wordAsyncQuery.getMeaningWord(term, new IWordAsyncQueryListener() {
+            wordAsyncQuery.getMeaningWord(term, new IWordQueryAsyncListener() {
                 @Override
-                public void onWordResult(Word word) {
+                public void onSuccess(Word word) {
                     lastUpdateWord = word;
 
                     if(hasMeaning(word)) {
@@ -46,6 +46,11 @@ public class WordModel implements IWordModel {
                     }
 
                     notifyListener();
+                }
+
+                @Override
+                public void onFailure() {
+
                 }
             });
 

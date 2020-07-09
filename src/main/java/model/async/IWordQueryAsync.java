@@ -1,5 +1,5 @@
 package model.async;
 
 public interface IWordQueryAsync {
-    void getMeaningWord(String term, IWordAsyncQueryListener listener);
+    void getMeaningWord(String term, IWordQueryAsyncListener listener);
 }

@@ -2,7 +2,7 @@ package model.async.wikipedia;
 
 import model.Word;
 import model.async.IWordQueryAsync;
-import model.async.IWordAsyncQueryListener;
+import model.async.IWordQueryAsyncListener;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -17,7 +17,7 @@ public class WikipediaApiQueryAsync implements IWordQueryAsync {
     }
 
     @Override
-    public void getMeaningWord(String term, IWordAsyncQueryListener listener) {
+    public void getMeaningWord(String term, IWordQueryAsyncListener listener) {
         wikipediaApi.getTerm(term).enqueue(new Callback<Word>() {
 
             public void onResponse(Call<Word> call, Response<Word> wordResponse) {
@@ -30,9 +30,9 @@ public class WikipediaApiQueryAsync implements IWordQueryAsync {
         });
     }
 
-    private void notifyListener(Word word, IWordAsyncQueryListener listener){
+    private void notifyListener(Word word, IWordQueryAsyncListener listener){
         if(listener!=null){
-            listener.onWordResult(word);
+            listener.onSuccess(word);
         }
     }
 }
