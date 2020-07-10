@@ -1,6 +1,7 @@
 package model.sql;
 
 import javax.sql.rowset.CachedRowSet;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public interface ISQLiteDB {

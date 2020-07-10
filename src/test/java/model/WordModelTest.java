@@ -12,6 +12,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import javax.sql.rowset.CachedRowSet;
 import java.util.Date;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -26,6 +27,7 @@ class WordModelTest {
     @Mock IWordCache cacheMock;
     @Mock IWordQueryAsync queryAsyncMock;
     @Mock IWordModelListener modelListenerMock;
+
     @InjectMocks WordModel modelTestSubject;
 
     @Captor ArgumentCaptor<IWordQueryAsyncListener> asyncListenerCaptor;

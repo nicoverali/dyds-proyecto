@@ -11,6 +11,7 @@ public class SQLiteDB implements ISQLiteDB {
 
     public SQLiteDB(String databaseName){
         this.dbUrl = String.format(BASE_URL, databaseName);
+        System.out.println(dbUrl);
     }
 
     @Override
@@ -34,6 +35,7 @@ public class SQLiteDB implements ISQLiteDB {
     public int executeUpdate(String update) throws SQLException{
         try (Connection conn = DriverManager.getConnection(dbUrl)){
             try (Statement statement = conn.createStatement()){
+                System.out.println(update);
                 int affectedRows = statement.executeUpdate(update);
                 return affectedRows;
             }
