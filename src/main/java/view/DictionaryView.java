@@ -3,6 +3,7 @@ package view;
 import controller.IDictionaryController;
 import model.IWordModel;
 import model.IWordModelListener;
+import model.Word;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
@@ -24,6 +25,10 @@ public class DictionaryView implements IDictionaryView {
     initListeners();
   }
 
+  public JPanel getContentPane(){
+    return contentPane;
+  }
+
   private void initJElements(){
     wordMeaningPanel.setContentType("text/html");
   }
@@ -38,17 +43,29 @@ public class DictionaryView implements IDictionaryView {
     dictModel.setListener(new IWordModelListener(){
       @Override
       public void onWordUpdate() {
-        wordMeaningPanel.setText(dictModel.getWord().getMeaning());
+        Word newWord = dictModel.getWord();
+        String meaningWithBold = textToHtml(newWord.getMeaning(), new String[]{newWord.getTerm()});
+        wordMeaningPanel.setText(meaningWithBold);
       }
 
       @Override
       public void onWordNotFound() {
-
+        wordMeaningPanel.setText("Sorry, no result.");
       }
     });
   }
 
-  public JPanel getContentPane(){
-    return contentPane;
+  private String textToHtml(String text, String[] boldWords){
+    StringBuilder builder =  new StringBuilder();
+    builder.append("<font face=\"arial\">");
+
+    String boldWordsRegex = "(?i)("+String.join("|", boldWords)+")";
+    String textWithBold = text.replaceAll(boldWordsRegex, "<b>$1</b>");
+
+    builder.append(textWithBold);
+
+    builder.append("</font>");
+    return builder.toString();
   }
+
 }
