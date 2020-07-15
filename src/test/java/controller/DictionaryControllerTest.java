@@ -25,8 +25,9 @@ class DictionaryControllerTest {
     }
 
     @Test
-    void onUserWordSearch_wordIsNull_shouldNotUpdateModel(){
+    void onUserWordSearch_wordIsNullOrIsEmpty_shouldNotUpdateModel(){
         controller.onUserWordSearch(null);
+        controller.onUserWordSearch("");
 
         verify(mockedModel, never()).searchWord(any());
     }

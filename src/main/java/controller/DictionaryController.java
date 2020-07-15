@@ -13,6 +13,12 @@ public class DictionaryController implements IDictionaryController {
 
     @Override
     public void onUserWordSearch(String word) {
-        dictModel.searchWord(word);
+        if(isValidWord(word)){
+            dictModel.searchWord(word);
+        }
+    }
+
+    private boolean isValidWord(String word){
+        return word != null && !word.isEmpty();
     }
 }

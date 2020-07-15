@@ -21,18 +21,17 @@ public class WikipediaApiQueryAsync implements IWordQueryAsync {
         wikipediaApi.getTerm(term).enqueue(new Callback<Word>() {
 
             public void onResponse(Call<Word> call, Response<Word> wordResponse) {
-                notifyListener(wordResponse.body(), listener);
+                Word result = wordResponse.body();
+                if(result != null){
+                    listener.onSuccess(wordResponse.body());
+                } else{
+                    listener.onFailure();
+                }
             }
 
             public void onFailure(Call<Word> call, Throwable t) {
-                // TODO What should we do on failure ?
+                listener.onFailure();
             }
         });
-    }
-
-    private void notifyListener(Word word, IWordQueryAsyncListener listener){
-        if(listener!=null){
-            listener.onSuccess(word);
-        }
     }
 }
