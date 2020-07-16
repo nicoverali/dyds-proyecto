@@ -57,7 +57,7 @@ public class DictionaryView implements IDictionaryView {
 
   private String textToHtml(String text, String[] boldWords){
     StringBuilder builder =  new StringBuilder();
-    builder.append("<font face=\"arial\">");
+    builder.append("<font face=\"Open Sans\" size=+1>");
 
     String boldWordsRegex = "(?i)("+String.join("|", boldWords)+")";
     String textWithBold = text.replaceAll(boldWordsRegex, "<b>$1</b>");
