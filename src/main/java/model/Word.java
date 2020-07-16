@@ -7,7 +7,7 @@ public class Word {
     private final String term;
     private final String meaning;
     private int source;
-    private Date date; // Ver el date que uso porque es cuestionable
+    private Date date;
 
     public Word(String term, String meaning){
         this.term = term;
